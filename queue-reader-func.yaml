@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keda-demo
+  labels:
+    app: keda-demo
+spec:
+  selector:
+    matchLabels:
+      app: keda-demo
+  template:
+    metadata:
+      labels:
+        app: keda-demo
+        aadpodidbinding: keda-msi
+    spec:
+      containers:
+      - name: keda-demo
+        image: markthebault/azurefunction-queue:latest
+        env:
+        - name: SERVICEBUS_NAMESPACE
+          value: mthbusdlk.servicebus.windows.net
+        - name: SERVICE_BUS_QUEUE_NAME
+          value: events

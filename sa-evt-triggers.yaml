@@ -1,0 +1,28 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: trigger-auth
+spec:
+  podIdentity:
+    provider: azure
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: keda-demo-scaler
+  labels:
+    app: keda-demo
+    name: keda-demo
+spec:
+  scaleTargetRef:
+    name: keda-demo
+  minReplicaCount: 0
+  maxReplicaCount: 10
+  triggers:
+    - type: azure-servicebus
+      metadata:
+        queueName: events
+        namespace: "mthbusdlk"
+        messageCount: "5" # Optional. Count of messages to trigger scaling on. Default: 5 messages
+      authenticationRef:
+        name: trigger-auth

@@ -1,0 +1,16 @@
+apiVersion: aadpodidentity.k8s.io/v1
+kind: AzureIdentity
+metadata:
+  name: keda-msi
+spec:
+  type: 0
+  resourceID: xxxxxxxx
+  clientID: xxxxxx
+---
+apiVersion: aadpodidentity.k8s.io/v1
+kind: AzureIdentityBinding
+metadata:
+  name: keda-msi-binding
+spec:
+  azureIdentity: keda-msi
+  selector: keda-msi
